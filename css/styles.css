@@ -139,3 +139,24 @@ a:hover{
   color: #EAF6F6;
   padding: 20px 0px;
 }
+
+/* New Styles Testing */
+
+.marquee {
+  position: relative;
+  width: 10vw;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.track {
+  position: absolute;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marquee 22s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
