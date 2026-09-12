@@ -398,6 +398,91 @@ h2 em {
   padding-bottom: 120px;
 }
 
+.background-section {
+  background: #e9eee7;
+}
+
+.background-grid {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 100px;
+}
+
+.background-grid .section-heading {
+  margin-bottom: 55px;
+}
+
+.skill-list {
+  border-top: 1px solid var(--line);
+}
+
+.skill-list>div {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  column-gap: 18px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.skill-list span {
+  color: var(--orange);
+  font: 11px var(--mono);
+}
+
+.skill-list h3 {
+  font-size: 20px;
+  letter-spacing: -.03em;
+  margin: 0 0 8px;
+}
+
+.skill-list p {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.credentials {
+  padding-top: 15px;
+}
+
+.credential-block {
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+  margin-bottom: 70px;
+}
+
+.credential-block .eyebrow {
+  margin-bottom: 28px;
+}
+
+.credential {
+  display: grid;
+  grid-template-columns: 65px 1fr;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.credential strong {
+  font-size: 21px;
+  letter-spacing: -.04em;
+}
+
+.credential span,
+.recognition {
+  color: var(--muted);
+  font: 12px/1.6 var(--mono);
+}
+
+.recognition {
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  padding: 15px 0;
+  margin: 0;
+}
+
 .project-grid article {
   padding: 25px 0;
   border-top: 2px solid var(--ink);
@@ -534,9 +619,14 @@ h2 em {
   }
 
   .expertise-grid,
-  .project-grid {
+  .project-grid,
+  .background-grid {
     grid-template-columns: 1fr;
     gap: 14px;
+  }
+
+  .background-grid {
+    gap: 70px;
   }
 
   .expertise-grid article {
