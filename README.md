@@ -1,22 +1,38 @@
-# Sandip Kundu Portfolio
+# Sandip Kundu — Personal Portfolio Website
 
-Static personal portfolio for Sandip Kundu, Senior Site Reliability Engineer.
+A responsive, zero-build personal portfolio website designed for **GitHub Pages**, showcasing **Sandip Kundu — Senior Site Reliability Engineer | Python Automation | Platform & Infrastructure**.
 
-## Run locally
+## Project Structure
 
-Open `index.html` directly, or serve the folder with:
-
-```bash
-python -m http.server 8000
+```text
+My-Website/
+├── css/
+│   └── styles.css           # Custom Obsidian Telemetry dark/light theme & animations
+├── js/
+│   └── main.js              # Interactive canvas mesh, terminal, filters, modals & palette
+├── img/
+│   ├── profile.jpg          # Portrait photo
+│   ├── aiops-platform.jpg   # AIOps Platform 3D visual asset
+│   ├── cloud-monitoring.jpg # Cloud-Native Monitoring 3D visual asset
+│   └── chaos-engineering.jpg# Chaos Engineering 3D visual asset
+├── favicon.svg              # Vector favicon (works alongside your existing favicon.ico)
+├── index.html               # Main portfolio entry point
+└── README.md                # Setup & GitHub Pages deployment guide
 ```
 
-Then visit `http://localhost:8000`.
+## How to Add to Your Existing `My-Website` Repository
 
-## Publish with GitHub Pages
-
-1. Push this repository to GitHub.
-2. Open **Settings > Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**.
-4. Select the `main` branch and `/ (root)`, then save.
-
-The site uses relative asset paths and requires no build step, so it can be served directly from the repository root.
+1. **Unzip** `My-Website.zip`.
+2. **Copy/replace** these files in your local `My-Website/` folder:
+   - Replace `index.html` and `css/styles.css`
+   - Add the `js/` folder (`js/main.js`)
+   - Copy all 4 images inside `img/` (`profile.jpg`, `aiops-platform.jpg`, `cloud-monitoring.jpg`, `chaos-engineering.jpg`) into your existing `img/` folder
+   - Optional: keep your existing `favicon.ico` and also add `favicon.svg`
+3. **Preview locally** by opening `index.html` in your browser (or running `python3 -m http.server 8000`).
+4. **Deploy to GitHub Pages**:
+   ```bash
+   git add .
+   git commit -m "Launch redesigned SRE portfolio website"
+   git push origin main
+   ```
+   Then open **GitHub Repo → Settings → Pages → Build and deployment**, select **Deploy from a branch** (`main` / `/ (root)`), and click **Save**.
