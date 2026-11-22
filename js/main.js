@@ -719,34 +719,116 @@
     });
   }
 
-  // ---- Contact Form & Copy Buttons ----
+  // ---- Copy Buttons ----
   function initContact() {
     document.querySelectorAll('[data-copy-value]').forEach((btn) => {
       btn.addEventListener('click', () => {
         copyToClipboard(btn.dataset.copyValue, btn.dataset.copyLabel || 'Text');
       });
     });
+  }
 
-    const form = document.getElementById('contact-form');
-    if (!form) return;
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('contact-name').value.trim();
-      const email = document.getElementById('contact-email').value.trim();
-      const subject = document.getElementById('contact-subject').value.trim() || 'Portfolio Inquiry';
-      const message = document.getElementById('contact-message').value.trim();
+  // ---- Interactive Face & Eye Mouse-Tracking Portrait ----
+  function initPortraitTracking() {
+    const stage = document.getElementById('portrait-stage');
+    const tiltEl = document.getElementById('portrait-tilt');
+    const glareEl = document.getElementById('portrait-glare');
+    const leftPupil = document.getElementById('eye-left-pupil');
+    const rightPupil = document.getElementById('eye-right-pupil');
+    const leftLid = document.getElementById('eye-left-lid');
+    const rightLid = document.getElementById('eye-right-lid');
+    if (!stage || !tiltEl || !leftPupil || !rightPupil) return;
 
-      if (!name || !email || !message) {
-        showToast('Please fill in your name, email, and message.');
-        return;
+    const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) return;
+
+    let targetX = 0; // -1 to 1
+    let targetY = 0; // -1 to 1
+    let curX = 0;
+    let curY = 0;
+    let glareX = 50;
+    let glareY = 30;
+    let rafId = null;
+
+    function updateFromClientPoint(clientX, clientY) {
+      const rect = stage.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const cx = rect.left + rect.width * 0.54;
+      const cy = rect.top + rect.height * 0.28; // eye level inside 1024x1024 portrait
+
+      const dx = (clientX - cx) / Math.max(window.innerWidth * 0.45, 280);
+      const dy = (clientY - cy) / Math.max(window.innerHeight * 0.45, 240);
+
+      targetX = Math.max(-1, Math.min(1, dx));
+      targetY = Math.max(-1, Math.min(1, dy));
+
+      glareX = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+      glareY = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+      stage.classList.add('tracking-active');
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      updateFromClientPoint(e.clientX, e.clientY);
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches[0]) {
+        updateFromClientPoint(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    document.addEventListener('mouseleave', () => {
+      targetX = 0;
+      targetY = 0;
+      stage.classList.remove('tracking-active');
+    });
+
+    function animate() {
+      curX += (targetX - curX) * 0.14;
+      curY += (targetY - curY) * 0.14;
+
+      // 3D Head / Portrait tilt toward cursor
+      const rotY = curX * 11;   // deg
+      const rotX = -curY * 8.5; // deg
+      const shiftX = curX * 5;
+      const shiftY = curY * 4;
+      tiltEl.style.transform = `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translate3d(${shiftX.toFixed(2)}px, ${shiftY.toFixed(2)}px, 0)`;
+
+      // Dynamic cyan/emerald specular sheen
+      if (glareEl) {
+        glareEl.style.background = `radial-gradient(circle at ${glareX.toFixed(1)}% ${glareY.toFixed(1)}%, rgba(56, 189, 248, 0.22), rgba(16, 185, 129, 0.10) 38%, transparent 70%)`;
       }
 
-      const body = `Hi Sandip,\n\n${message}\n\nBest regards,\n${name} (${email})`;
-      const mailtoUrl = `mailto:sandipkundu06.sk@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.location.href = mailtoUrl;
-      showToast('Opening your email client with the pre-filled message!');
-      form.reset();
-    });
+      // Precision eye pupil offset (clamped inside natural eye socket bounds)
+      const eyeDx = curX * 5.2;
+      const eyeDy = curY * 2.3;
+      const pupilTransform = `translate(${eyeDx.toFixed(2)}px, ${eyeDy.toFixed(2)}px)`;
+      leftPupil.style.transform = pupilTransform;
+      rightPupil.style.transform = pupilTransform;
+
+      rafId = requestAnimationFrame(animate);
+    }
+
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(animate);
+
+    // Subtle natural blink cycle
+    function scheduleBlink() {
+      const delay = 3600 + Math.random() * 2800;
+      setTimeout(() => {
+        if (leftLid && rightLid) {
+          leftLid.style.transform = 'scaleY(1)';
+          rightLid.style.transform = 'scaleY(1)';
+          setTimeout(() => {
+            leftLid.style.transform = 'scaleY(0)';
+            rightLid.style.transform = 'scaleY(0)';
+            scheduleBlink();
+          }, 130);
+        }
+      }, delay);
+    }
+    scheduleBlink();
   }
 
   // ---- Boot ----
@@ -762,6 +844,7 @@
     initMobileMenu();
     initCommandPalette();
     initContact();
+    initPortraitTracking();
 
     if (window.lucide && window.lucide.createIcons) {
       window.lucide.createIcons();

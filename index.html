@@ -138,42 +138,96 @@
             </div>
           </div>
 
-          <!-- Right Portrait Card -->
+          <!-- Right Portrait Card (Interactive Face & Eye-Tracking Rig) -->
           <div class="lg:col-span-5 flex justify-center">
-            <div class="relative max-w-sm w-full">
-              <div class="portrait-ring">
-                <div class="rounded-[1.5rem] overflow-hidden bg-[#0c1220] relative">
-                  <img src="img/profile.jpg" alt="Sandip Kundu — Senior Site Reliability Engineer" class="w-full h-auto object-cover block" />
-                  <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#070b14]/90 via-[#070b14]/35 to-transparent"></div>
-                  <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-mono text-slate-200">
-                    <span class="flex items-center gap-1.5">
-                      <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                      PROD READY
-                    </span>
-                    <span class="text-sky-300">AWS · K8s · AIOps</span>
+            <div id="portrait-stage" class="portrait-stage relative max-w-sm w-full">
+              <div id="portrait-tilt" class="portrait-tilt relative">
+                <div class="portrait-ring">
+                  <div class="rounded-[1.5rem] overflow-hidden bg-[#0c1220] relative">
+                    <img src="img/profile.jpg" alt="Sandip Kundu — Senior Site Reliability Engineer" class="w-full h-auto object-cover block select-none" draggable="false" />
+
+                    <!-- Precision Eye-Tracking SVG Rig (aligned 1:1 to 1024x1024 portrait) -->
+                    <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1024 1024" aria-hidden="true">
+                      <defs>
+                        <!-- Almond eye socket clip paths calibrated to portrait coordinates -->
+                        <clipPath id="clip-eye-left">
+                          <path d="M518,281.5 Q531.5,273.5 544.5,281 Q531.5,284.5 518,281.5 Z" />
+                        </clipPath>
+                        <clipPath id="clip-eye-right">
+                          <path d="M576,281 Q589.5,273 603.5,280.5 Q589.5,284.5 576,281 Z" />
+                        </clipPath>
+                        <linearGradient id="sclera-shade" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stop-color="#c9b4a8" />
+                          <stop offset="35%" stop-color="#f3e9e1" />
+                          <stop offset="100%" stop-color="#ebe0d7" />
+                        </linearGradient>
+                      </defs>
+
+                      <!-- Viewer's Left Eye (Sandip's Right Eye) -->
+                      <g clip-path="url(#clip-eye-left)">
+                        <rect x="515" y="272" width="32" height="15" fill="url(#sclera-shade)" />
+                        <g id="eye-left-pupil">
+                          <circle cx="531.5" cy="279.2" r="6.4" fill="#2c170f" />
+                          <circle cx="531.5" cy="279.2" r="3.4" fill="#0d0705" />
+                          <circle cx="529.3" cy="277.3" r="1.6" fill="#ffffff" opacity="0.92" />
+                          <circle cx="533.8" cy="280.8" r="0.7" fill="#38bdf8" opacity="0.7" />
+                        </g>
+                        <!-- Upper lash shadow -->
+                        <path d="M517,281.5 Q531.5,273.5 545,281" fill="none" stroke="#1b0e09" stroke-width="2.2" />
+                        <!-- Blink eyelid -->
+                        <rect id="eye-left-lid" class="eye-lid-anim" x="515" y="272" width="32" height="15" fill="#c98862" style="transform: scaleY(0);" />
+                      </g>
+
+                      <!-- Viewer's Right Eye (Sandip's Left Eye) -->
+                      <g clip-path="url(#clip-eye-right)">
+                        <rect x="574" y="271" width="32" height="16" fill="url(#sclera-shade)" />
+                        <g id="eye-right-pupil">
+                          <circle cx="589.5" cy="278.8" r="6.4" fill="#2c170f" />
+                          <circle cx="589.5" cy="278.8" r="3.4" fill="#0d0705" />
+                          <circle cx="587.3" cy="276.9" r="1.6" fill="#ffffff" opacity="0.92" />
+                          <circle cx="591.8" cy="280.4" r="0.7" fill="#10b981" opacity="0.7" />
+                        </g>
+                        <!-- Upper lash shadow -->
+                        <path d="M575,281 Q589.5,273 604,280.5" fill="none" stroke="#1b0e09" stroke-width="2.2" />
+                        <!-- Blink eyelid -->
+                        <rect id="eye-right-lid" class="eye-lid-anim" x="574" y="271" width="32" height="16" fill="#c98862" style="transform: scaleY(0);" />
+                      </g>
+                    </svg>
+
+                    <!-- Dynamic Cursor-Tracking Specular Glare -->
+                    <div id="portrait-glare" class="portrait-glare" aria-hidden="true"></div>
+
+                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#070b14]/90 via-[#070b14]/35 to-transparent pointer-events-none"></div>
+                    <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-mono text-slate-200 pointer-events-none">
+                      <span class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        PROD READY
+                      </span>
+                      <span class="text-sky-300">AWS · K8s · AIOps</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <!-- Floating Telemetry Badge 1 -->
-              <div class="animate-float hidden sm:flex items-center gap-3 glass-card rounded-2xl px-4 py-3 absolute -top-5 -left-8">
-                <div class="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-400">
-                  <i data-lucide="shield-check" class="w-4 h-4"></i>
+                <!-- Floating Telemetry Badge 1 -->
+                <div class="portrait-badge animate-float hidden sm:flex items-center gap-3 glass-card rounded-2xl px-4 py-3 absolute -top-5 -left-8">
+                  <div class="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-400">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <div class="font-mono font-bold text-sm leading-none">99.9% SLO</div>
+                    <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">API Availability</div>
+                  </div>
                 </div>
-                <div>
-                  <div class="font-mono font-bold text-sm leading-none">99.9% SLO</div>
-                  <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">API Availability</div>
-                </div>
-              </div>
 
-              <!-- Floating Telemetry Badge 2 -->
-              <div class="animate-float-delayed hidden sm:flex items-center gap-3 glass-card rounded-2xl px-4 py-3 absolute -bottom-5 -right-6">
-                <div class="w-9 h-9 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-400">
-                  <i data-lucide="trophy" class="w-4 h-4"></i>
-                </div>
-                <div>
-                  <div class="font-mono font-bold text-sm leading-none">1st Place</div>
-                  <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">EmploAI Hackathon</div>
+                <!-- Floating Telemetry Badge 2 -->
+                <div class="portrait-badge animate-float-delayed hidden sm:flex items-center gap-3 glass-card rounded-2xl px-4 py-3 absolute -bottom-5 -right-6">
+                  <div class="w-9 h-9 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-400">
+                    <i data-lucide="trophy" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <div class="font-mono font-bold text-sm leading-none">1st Place</div>
+                    <div class="text-[11px] text-[var(--text-secondary)] mt-0.5">EmploAI Hackathon</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -554,67 +608,40 @@
 
     <!-- ==================== CONTACT SECTION ==================== -->
     <section id="contact" class="py-20 border-t border-[var(--border-subtle)] bg-[var(--bg-secondary)]/50">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="glass-card rounded-3xl p-6 sm:p-10 reveal">
-          <div class="grid lg:grid-cols-12 gap-10">
-            <div class="lg:col-span-5 space-y-5">
-              <span class="font-mono text-xs uppercase tracking-widest text-emerald-400">Get in Touch</span>
-              <h2 class="text-3xl font-bold tracking-tight">Let's Build Reliable Systems Together</h2>
-              <p class="text-sm text-[var(--text-secondary)]">
-                Open to connecting on Site Reliability Engineering, Cloud Platform architecture, Kubernetes observability, and AIOps automation.
-              </p>
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass-card rounded-3xl p-8 sm:p-12 text-center reveal">
+          <span class="font-mono text-xs uppercase tracking-widest text-emerald-400">Get in Touch</span>
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mt-2">Let's Build Reliable Systems Together</h2>
+          <p class="text-sm sm:text-base text-[var(--text-secondary)] max-w-xl mx-auto mt-3">
+            Open to connecting on Site Reliability Engineering, Cloud Platform architecture, Kubernetes observability, and AIOps automation.
+          </p>
 
-              <div class="space-y-3 pt-2">
-                <button type="button" data-copy-value="sandipkundu06.sk@gmail.com" data-copy-label="Email" class="w-full text-left p-3.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-primary)]/60 hover:border-sky-400/50 flex items-center justify-between gap-3 transition-colors">
-                  <div class="flex items-center gap-3 min-w-0">
-                    <i data-lucide="mail" class="w-4 h-4 text-sky-400 shrink-0"></i>
-                    <span class="text-sm font-mono truncate">sandipkundu06.sk@gmail.com</span>
-                  </div>
-                  <i data-lucide="copy" class="w-4 h-4 text-[var(--text-muted)] shrink-0"></i>
-                </button>
-
-                <button type="button" data-copy-value="+91-8210827318" data-copy-label="Phone number" class="w-full text-left p-3.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-primary)]/60 hover:border-emerald-400/50 flex items-center justify-between gap-3 transition-colors">
-                  <div class="flex items-center gap-3">
-                    <i data-lucide="phone" class="w-4 h-4 text-emerald-400 shrink-0"></i>
-                    <span class="text-sm font-mono">+91-8210827318</span>
-                  </div>
-                  <i data-lucide="copy" class="w-4 h-4 text-[var(--text-muted)] shrink-0"></i>
-                </button>
-
-                <a href="https://www.linkedin.com/in/sandip-kundu-a4b63020b/" target="_blank" rel="noopener noreferrer" class="w-full p-3.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-primary)]/60 hover:border-sky-400/50 flex items-center justify-between gap-3 transition-colors">
-                  <div class="flex items-center gap-3">
-                    <i data-lucide="linkedin" class="w-4 h-4 text-sky-400 shrink-0"></i>
-                    <span class="text-sm font-mono">linkedin.com/in/sandip-kundu</span>
-                  </div>
-                  <i data-lucide="external-link" class="w-4 h-4 text-[var(--text-muted)] shrink-0"></i>
-                </a>
-              </div>
-            </div>
-
-            <form id="contact-form" class="lg:col-span-7 space-y-4">
-              <div class="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label for="contact-name" class="block text-xs font-mono text-[var(--text-secondary)] mb-1.5">Your Name</label>
-                  <input id="contact-name" type="text" required placeholder="Alex Rivera" class="w-full px-4 py-2.5 rounded-xl text-sm border border-[var(--border-subtle)] bg-[var(--bg-primary)]/70 focus:outline-none focus:border-sky-400" />
+          <div class="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8">
+            <a href="mailto:sandipkundu06.sk@gmail.com" class="group p-5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-primary)]/70 hover:border-sky-400/60 hover:-translate-y-1 flex items-center justify-between gap-4 text-left transition-all">
+              <div class="flex items-center gap-4 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-400 shrink-0 group-hover:scale-105 transition-transform">
+                  <i data-lucide="mail" class="w-5 h-5"></i>
                 </div>
-                <div>
-                  <label for="contact-email" class="block text-xs font-mono text-[var(--text-secondary)] mb-1.5">Your Email</label>
-                  <input id="contact-email" type="email" required placeholder="alex@company.com" class="w-full px-4 py-2.5 rounded-xl text-sm border border-[var(--border-subtle)] bg-[var(--bg-primary)]/70 focus:outline-none focus:border-sky-400" />
+                <div class="min-w-0">
+                  <div class="text-xs font-mono uppercase tracking-wider text-sky-400">Email Directly</div>
+                  <div class="text-sm font-mono font-medium truncate mt-0.5">sandipkundu06.sk@gmail.com</div>
                 </div>
               </div>
-              <div>
-                <label for="contact-subject" class="block text-xs font-mono text-[var(--text-secondary)] mb-1.5">Subject</label>
-                <input id="contact-subject" type="text" placeholder="SRE / Platform Engineering Opportunity" class="w-full px-4 py-2.5 rounded-xl text-sm border border-[var(--border-subtle)] bg-[var(--bg-primary)]/70 focus:outline-none focus:border-sky-400" />
+              <i data-lucide="arrow-up-right" class="w-4 h-4 text-[var(--text-muted)] group-hover:text-sky-400 shrink-0 transition-colors"></i>
+            </a>
+
+            <a href="https://www.linkedin.com/in/sandip-kundu-a4b63020b/" target="_blank" rel="noopener noreferrer" class="group p-5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-primary)]/70 hover:border-emerald-400/60 hover:-translate-y-1 flex items-center justify-between gap-4 text-left transition-all">
+              <div class="flex items-center gap-4 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                  <i data-lucide="linkedin" class="w-5 h-5"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-mono uppercase tracking-wider text-emerald-400">LinkedIn Profile</div>
+                  <div class="text-sm font-mono font-medium truncate mt-0.5">linkedin.com/in/sandip-kundu</div>
+                </div>
               </div>
-              <div>
-                <label for="contact-message" class="block text-xs font-mono text-[var(--text-secondary)] mb-1.5">Message</label>
-                <textarea id="contact-message" rows="4" required placeholder="Tell me about the role, team, or infrastructure challenge..." class="w-full px-4 py-2.5 rounded-xl text-sm border border-[var(--border-subtle)] bg-[var(--bg-primary)]/70 focus:outline-none focus:border-sky-400 resize-none"></textarea>
-              </div>
-              <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm bg-gradient-to-r from-sky-500 to-emerald-500 text-slate-950 hover:brightness-110 transition-all">
-                <i data-lucide="send" class="w-4 h-4"></i>
-                <span>Compose Email</span>
-              </button>
-            </form>
+              <i data-lucide="external-link" class="w-4 h-4 text-[var(--text-muted)] group-hover:text-emerald-400 shrink-0 transition-colors"></i>
+            </a>
           </div>
         </div>
       </div>

@@ -176,7 +176,7 @@ body {
 }
 
 .portrait-ring:hover {
-  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 28px 72px -14px rgba(56, 189, 248, 0.45);
 }
 
 @keyframes floatSlow {
@@ -344,4 +344,39 @@ body {
 }
 .portrait-ring {
   animation: portraitGlow 5s ease-in-out infinite;
+}
+
+/* Interactive 3D Face & Eye-Tracking Portrait Rig */
+.portrait-stage {
+  perspective: 950px;
+}
+
+.portrait-tilt {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: box-shadow 0.3s ease;
+}
+
+.portrait-tilt .portrait-badge {
+  transform: translateZ(34px);
+}
+
+.portrait-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  mix-blend-mode: screen;
+}
+
+.portrait-stage:hover .portrait-glare,
+.portrait-stage.tracking-active .portrait-glare {
+  opacity: 1;
+}
+
+.eye-lid-anim {
+  transform-box: fill-box;
+  transform-origin: center top;
+  transition: transform 0.085s ease-in-out;
 }
